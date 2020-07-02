@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Message, Label, Icon, Loader, Menu } from 'semantic-ui-react';
+import { Grid, Message, Label, Icon, Loader, Menu, Input } from 'semantic-ui-react';
 import axios from 'axios';
 
 
@@ -11,6 +11,8 @@ class App extends React.Component {
             progressing: false, 
             isEmployee: false,
             isDepartment: false, 
+            dept_no : "",
+            dept_name : ""
        };
    }
 
@@ -36,6 +38,42 @@ class App extends React.Component {
        });
       this.getData(backend);
    }
+
+   addDeptClicked() {
+      const backend = "http://localhost:3001/api/postDept";
+      const {dept_no, dept_name} = this.state;
+      console.log("on addDeptClicked");
+      console.log(dept_no);
+      console.log(dept_name);
+      this.setState ({
+          progressing: true,
+          responseMessage: "",
+          isDepartment: false,
+          isEmployee: false
+      });
+      this.postData(backend, {dept_no: dept_no, dept_name: dept_name});
+    }
+
+    async postData (url, data){
+      try {
+            const response = await axios.post(
+              'http://localhost:3001/api/postDept',
+              { data: data}
+            );
+            console.log("postData()");
+            console.log("url = " + url);
+            console.log(response.status);
+            console.log(response.data.success);
+            this.setState ({
+                progressing: false
+            });
+    } catch (error) {
+            console.log(`Axios post failed: ${error}`);
+            this.setState ({
+                 progressing: false
+            });
+       }
+    }
 
    employeeClicked() {
     const backend = "http://localhost:3001/api/getEmployee";  
@@ -106,6 +144,18 @@ class App extends React.Component {
                      <Icon name="play circle outline" color="green" size="huge" disabled={progressing}  style={{position: "relative", left: "38%", marginTop: "10px"}} onClick={()=>this.salesClicked()}> </Icon>
                 </Grid.Column>
             </Grid.Row> 
+            <Grid.Row style={styles.menucontainer}>             
+                <Grid.Column style={styles.testColumn}>  
+                <Label style={styles.menulabel}> Add Department </Label>
+                     <Input type="text" placeholder="Department No." style={{width:"100%", marginTop: "15px"}} 
+                           onChange={(e, { value }) => this.setState ({dept_no: value})} />
+                     <Input type="text" placeholder="Department Name" style={{width:"100%", marginTop: "5px"}} 
+                           onChange={(e, { value }) => this.setState({dept_name: value})} />
+                     <Icon name="play circle outline" color="green" size="huge" 
+                           disabled={progressing} style={{position: "relative", left: "38%", marginTop: "10px"}} 
+                           onClick={()=>this.addDeptClicked()}> </Icon>                  
+                </Grid.Column>
+            </Grid.Row> 
             <Grid.Row style={{width: "100%", marginTop: "10px"}}>
                  <Grid.Column style={{width: "10%", marginLeft: "10px"}}>               
                       <Loader active={progressing} size="large"/> 
@@ -160,7 +210,8 @@ const styles = {
    },
    testColumn: {
     padding:    "10px",
-    margin:     "40px",
+    marginLeft:     "40px",
+    marginRight:  "40px",
     width:      "25%",
     border:     "1px dotted black"
    },

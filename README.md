@@ -54,8 +54,21 @@ LIMIT 2000 ;
 
 # find employees listed in departments of both Sales and Finance
 
-SELECT DISTINCT employees_sales.first_name, employees_sales.last_name, employees_sales.emp_no, employees_sales.dept_name from employees_sales
+SELECT DISTINCT employees_sales.first_name, employees_sales.last_name, employees_sales.emp_no, 
+
+employees_sales.dept_name from employees_sales
+
 JOIN employees_finance  on (employees_sales.emp_no=employees_finance.emp_no)
+
+# add a department
+
+const {dept_no, dept_name} = req.body.data;
+
+let todo = [dept_no, dept_name];
+
+let sql = `INSERT INTO departments VALUES(?, ?)`;
+
+con.query(sql, todo, function (err, results, fields) {
 
 
 
