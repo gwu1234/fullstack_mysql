@@ -71,4 +71,12 @@ let sql = `INSERT INTO departments VALUES(?, ?)`;
 con.query(sql, todo, function (err, results, fields) {
 
 
+# delete a department
+
+const {dept_no, dept_name} = req.body;
+
+let sql = "DELETE FROM departments WHERE dept_no = ?";
+
+con.query(sql, dept_no, function (err, results, fields) {
+
 
