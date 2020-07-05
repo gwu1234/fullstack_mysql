@@ -46,6 +46,30 @@ exports.postDepartment = (req, res) => {
     }); 
 };
 
+exports.updateDepartment = (req, res) => {
+    console.log ("updateDepartment");
+    const {dept_no, dept_name} = req.body.data;
+    console.log(dept_no);
+    console.log(dept_name);        
+    let todo = [dept_name, dept_no];
+    let sql = `UPDATE departments SET dept_name = ? WHERE dept_no = ? `;
+    con.query(sql, todo, function (err, results, fields) {
+    if (err) {
+      console.log ("sql error");  
+      console.log (err);
+      res.status(400).json({
+          success: false, error: err
+       });
+       return;
+     }
+     console.log("sql ok");
+     console.log(results.insertId);
+     console.log(fields);
+     res.status(200).json({ success: true, error: ""});
+  }); 
+};
+
+
 exports.deleteDepartment = (req, res) => {
         console.log ("deleteDepartment");
         const {dept_no, dept_name} = req.body;

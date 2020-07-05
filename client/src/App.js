@@ -92,6 +92,45 @@ class App extends React.Component {
       this.deleteData(backend, {dept_no: dept_no, dept_name: dept_name});
     }
 
+    updateDeptClicked() {
+      const backend = "http://localhost:3001/api/updateDept";
+      const {dept_no, dept_name} = this.state;
+      if  (dept_no   === undefined || dept_no === "" ||
+           dept_name === undefined || dept_name === ""  )  
+           return;
+      console.log("on updateDeptClicked");
+      console.log(dept_no);
+      console.log(dept_name);
+      this.setState ({
+          progressing: true,
+          responseMessage: "",
+          isDepartment: false,
+          isEmployee: false
+      });
+      this.putData(backend, {dept_no: dept_no, dept_name: dept_name});
+    }
+
+    async putData (url, data){
+      try {
+            const response = await axios.put(
+              url,
+              { data: data}
+            );
+            console.log("putData()");
+            console.log("url = " + url);
+            console.log(response.status);
+            console.log(response.data.success);
+            this.setState ({
+                progressing: false
+            });
+    } catch (error) {
+            console.log(`Axios post failed: ${error}`);
+            this.setState ({
+                 progressing: false
+            });
+       }
+    }
+
     async deleteData (url, data){
       try {
             const response = await axios.delete(
@@ -203,6 +242,17 @@ class App extends React.Component {
                      <Icon name="play circle outline" color="green" size="huge" 
                            disabled={progressing} style={{position: "relative", left: "38%", marginTop: "10px"}} 
                            onClick={()=>this.deleteDeptClicked()}> </Icon>                  
+                </Grid.Column>
+
+                <Grid.Column style={styles.testColumn}>  
+                <Label style={styles.menulabel}> Update Department </Label>
+                     <Input type="text" placeholder="Department No." style={{width:"100%", marginTop: "15px"}} 
+                           onChange={(e, { value }) => this.setState ({dept_no: value})} />
+                     <Input type="text" placeholder="Department Name" style={{width:"100%", marginTop: "5px"}} 
+                           onChange={(e, { value }) => this.setState({dept_name: value})} />
+                     <Icon name="play circle outline" color="green" size="huge" 
+                           disabled={progressing} style={{position: "relative", left: "38%", marginTop: "10px"}} 
+                           onClick={()=>this.updateDeptClicked()}> </Icon>                  
                 </Grid.Column>
 
             </Grid.Row> 

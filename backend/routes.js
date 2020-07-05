@@ -4,7 +4,8 @@ const {
     findEmployees,
     findEmployeesInSalesFinance,
     postDepartment, 
-    deleteDepartment
+    deleteDepartment,
+    updateDepartment
 } = require("./controllers");
 
 const router = express.Router();
@@ -15,6 +16,7 @@ router.get('/getSales', findEmployeesInSalesFinance);
 
 router.post('/postDept', postDepartment);
 router.delete('/deleteDept', deleteDepartment);
+router.put('/updateDept', updateDepartment);
 
 module.exports = router;
 

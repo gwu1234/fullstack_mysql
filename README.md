@@ -79,4 +79,11 @@ let sql = "DELETE FROM departments WHERE dept_no = ?";
 
 con.query(sql, dept_no, function (err, results, fields) {
 
+# update a department
+let todo = [dept_name, dept_no];
+
+let sql = `UPDATE departments SET dept_name = ? WHERE dept_no = ? `;
+
+con.query(sql, todo, function (err, results, fields) {
+
 
