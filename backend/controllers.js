@@ -46,6 +46,30 @@ exports.postDepartment = (req, res) => {
     }); 
 };
 
+exports.deleteDepartment = (req, res) => {
+        console.log ("deleteDepartment");
+        const {dept_no, dept_name} = req.body;
+        console.log(dept_no);
+        console.log(dept_name);        
+        let sql = "DELETE FROM departments WHERE dept_no = ?";
+        console.log(sql);
+        con.query(sql, dept_no, function (err, results, fields) {
+            if (err) {
+                console.log ("sql error");  
+                console.log (err);
+                res.status(400).json({
+                    success: false, error: err
+                });
+                return;
+            }
+            console.log("sql ok");
+            console.log(results.insertId);
+            console.log(fields);
+            res.status(200).json({ success: true, error: ""});
+        }); 
+};
+
+
 exports.findEmployees = (req, res) => {
     con.query("SELECT * FROM employees ORDER BY last_name LIMIT 50", function (err, rows) {
         console.log("employee list retrieved");

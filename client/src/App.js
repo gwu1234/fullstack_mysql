@@ -57,7 +57,7 @@ class App extends React.Component {
     async postData (url, data){
       try {
             const response = await axios.post(
-              'http://localhost:3001/api/postDept',
+              url,
               { data: data}
             );
             console.log("postData()");
@@ -74,6 +74,44 @@ class App extends React.Component {
             });
        }
     }
+
+    deleteDeptClicked() {
+      const backend = "http://localhost:3001/api/deleteDept";
+      const {dept_no, dept_name} = this.state;
+      if (dept_no === undefined || dept_no === "" )
+          return;
+      console.log("on deleteDeptClicked");
+      console.log(dept_no);
+      console.log(dept_name);
+      this.setState ({
+          progressing: true,
+          responseMessage: "",
+          isDepartment: false,
+          isEmployee: false
+      });
+      this.deleteData(backend, {dept_no: dept_no, dept_name: dept_name});
+    }
+
+    async deleteData (url, data){
+      try {
+            const response = await axios.delete(
+              url,
+              { data: data}
+            );
+            console.log("deleteData()");
+            console.log("url = " + url);
+            console.log(response.status);
+            console.log(response.data.success);
+            this.setState ({
+                progressing: false
+            });
+    } catch (error) {
+            console.log(`Axios delete failed: ${error}`);
+            this.setState ({
+                 progressing: false
+            });
+       }
+    }   
 
    employeeClicked() {
     const backend = "http://localhost:3001/api/getEmployee";  
@@ -155,6 +193,18 @@ class App extends React.Component {
                            disabled={progressing} style={{position: "relative", left: "38%", marginTop: "10px"}} 
                            onClick={()=>this.addDeptClicked()}> </Icon>                  
                 </Grid.Column>
+
+                <Grid.Column style={styles.testColumn}>  
+                <Label style={styles.menulabel}> Delete Department </Label>
+                     <Input type="text" placeholder="Department No." style={{width:"100%", marginTop: "15px"}} 
+                           onChange={(e, { value }) => this.setState ({dept_no: value})} />
+                     <Input type="text" placeholder="Department Name" style={{width:"100%", marginTop: "5px"}} 
+                           onChange={(e, { value }) => this.setState({dept_name: value})} />
+                     <Icon name="play circle outline" color="green" size="huge" 
+                           disabled={progressing} style={{position: "relative", left: "38%", marginTop: "10px"}} 
+                           onClick={()=>this.deleteDeptClicked()}> </Icon>                  
+                </Grid.Column>
+
             </Grid.Row> 
             <Grid.Row style={{width: "100%", marginTop: "10px"}}>
                  <Grid.Column style={{width: "10%", marginLeft: "10px"}}>               

@@ -3,7 +3,8 @@ const {
     findDepartments,
     findEmployees,
     findEmployeesInSalesFinance,
-    postDepartment
+    postDepartment, 
+    deleteDepartment
 } = require("./controllers");
 
 const router = express.Router();
@@ -13,7 +14,7 @@ router.get("/getEmployee", findEmployees);
 router.get('/getSales', findEmployeesInSalesFinance);
 
 router.post('/postDept', postDepartment);
-
+router.delete('/deleteDept', deleteDepartment);
 
 module.exports = router;
 
