@@ -5,7 +5,8 @@ const {
     findEmployeesInSalesFinance,
     postDepartment, 
     deleteDepartment,
-    updateDepartment
+    updateDepartment, 
+    pushNotification
 } = require("./controllers");
 
 const router = express.Router();
@@ -18,5 +19,7 @@ router.post('/postDept', postDepartment);
 router.delete('/deleteDept', deleteDepartment);
 router.put('/updateDept', updateDepartment);
 
+router.post('/notifications/subscribe', pushNotification);
+    
 module.exports = router;
 

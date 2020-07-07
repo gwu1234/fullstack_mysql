@@ -1,4 +1,7 @@
 var mysql = require('mysql');  
+const dotenv = require('dotenv');
+const webpush = require('web-push');
+
 var con = mysql.createConnection({  
     host: "127.0.0.1",  
     user: "root",  
@@ -10,6 +13,9 @@ con.connect(function(err) {
     if (err) throw err;  
     console.log("Connected!");
 }); 
+
+dotenv.config()
+webpush.setVapidDetails(process.env.WEB_PUSH_CONTACT, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
 exports.findDepartments = (req, res) => {
     con.query("SELECT * FROM departments ORDER BY dept_name DESC", function (err, rows) {
@@ -117,4 +123,32 @@ exports.findEmployeesInSalesFinance = (req, res) => {
            res.json({ success: true, data: rows});
       });  
   };
+
+  exports.pushNotification= (req, res) => {
+        const subscription = req.body
+    
+        console.log("subscription : ");
+        //console.log(subscription)
+    
+        const payload = JSON.stringify({
+        title: 'testing push notification!',
+        body: 'It works.',
+        })
+
+        //console.log("payload: ");
+        //console.log(payload);
+    
+        webpush.sendNotification(subscription, payload)
+        .then(result => {
+              console.log("successfully sent : "); 
+              //console.log(result)
+          })
+        .catch(e => {
+            console.log("error stack : "); 
+            console.log(e.stack)
+          })
+    
+        res.status(200).json({'success': true})
+  };
+  
   

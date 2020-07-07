@@ -1,6 +1,10 @@
 it is a demo project of full stack node.js application. It has a React frontend, 
 
-node.js backend, and a MySql sql database.
+node.js backend, and a MySql sql database. It has a very basic function as a 
+
+Progressive Web Application (PWA): the node.js backend can send push notication 
+
+to frontend React app.
 
 MySql is installed on a localhost for this demo project. MySql of community edition 
 
@@ -80,10 +84,53 @@ let sql = "DELETE FROM departments WHERE dept_no = ?";
 con.query(sql, dept_no, function (err, results, fields) {
 
 # update a department
+
 let todo = [dept_name, dept_no];
 
 let sql = `UPDATE departments SET dept_name = ? WHERE dept_no = ? `;
 
 con.query(sql, todo, function (err, results, fields) {
+
+
+# Push Notification
+
+Step 1: start service worker at React frontend 
+
+serviceWorker.register();
+
+subscribeUser()
+
+Step 2:  Register to Push Manager at React frontend 
+
+registration.pushManager.subscribe({
+
+    applicationServerKey: convertedVapidKey,
+
+    userVisibleOnly: true,
+
+})
+
+Step 3: Subscribe to Node.js backend 
+
+fetch(`${process.env.REACT_APP_API_URL}/api/notifications/subscribe`, {
+
+    method: 'POST',
+
+    body: JSON.stringify(subscription),
+
+    headers: {
+
+      'Content-Type': 'application/json'
+
+    }
+    
+  })
+
+Step 4: Node.js backend: saving subscribing user and push notification  
+
+     const subscription = req.body
+
+     webpush.sendNotification(subscription, payload)
+
 
 
