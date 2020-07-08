@@ -30,6 +30,12 @@ function sendSubscription(subscription) {
 export function subscribeUser() {
   console.log("in subscribeUser");
   if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.addEventListener('message', event => {
+      // event is a MessageEvent object
+      console.log(`The service worker sent me a message: ${event.data}`);
+    });
+
     navigator.serviceWorker.ready.then(function(registration) {
       if (!registration.pushManager) {
         console.log('Push manager unavailable.')
@@ -54,7 +60,8 @@ export function subscribeUser() {
           })
         } else {
           console.log('Existed subscription detected.');
-          console.log(existedSubscription);
+          //console.log(existedSubscription);
+          registration.active.postMessage("Hi service worker");
           sendSubscription(existedSubscription)
         }
       })

@@ -132,5 +132,29 @@ Step 4: Node.js backend: saving subscribing user and push notification
 
      webpush.sendNotification(subscription, payload)
 
+Step 5: Communication between React app and serviceWorker via api postMessage 
+
+on app: 
+
+navigator.serviceWorker.addEventListener('message', event => {
+
+      console.log(`The service worker sent me a message: ${event.data}`);
+
+    });
+
+registration.active.postMessage("Hi service worker");
+
+on serviceWorker: 
+
+self.addEventListener('message', event => {
+    
+    console.log(`The client sent me a message: ${event.data}`);
+  
+    event.source.postMessage("Hi client, greeting from serviveWork");
+  
+  });
+
+
+
 
 
